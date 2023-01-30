@@ -13,6 +13,7 @@
 int getFragment(ArrayParty *party, int index);
 int getFragmentIndex(ArrayParty *party, int index);
 int out_of_bounds(ArrayParty *party, int index);
+void allocateFragment(ArrayParty *party);
 
 // Main Functions
 
@@ -29,6 +30,8 @@ ArrayParty *createArrayParty(int num_fragments, int fragment_length)
   if ((party = malloc(sizeof(ArrayParty))) == NULL)
     return NULL;
 
+  // Calloc: Clear that sh!t out! All the array fragments 
+  // at initialization should be unallocated (i.e., NULL).
   if ((party->fragments = calloc(num_fragments, sizeof(int *))) == NULL)
     return NULL;
 
@@ -117,7 +120,7 @@ ArrayParty *cloneArrayParty(ArrayParty *party)
   return partyClone;
 }
 
-// Sets 'key' at specified index in the ArrayParty.
+// Sets 'key' at 'index' in the ArrayParty.
 int set(ArrayParty *party, int index, int key)
 {
 
@@ -134,6 +137,9 @@ int set(ArrayParty *party, int index, int key)
     return LPA_FAILURE;
   }
 
+  fragment = getFragment(party, index);
+  fragmentIndex = getFragmentIndex(party, index);
+
   // Checks if index is invalid. (I,e., index is out of ArrayParty bounds).
   if (out_of_bounds(party, index))
   {
@@ -142,11 +148,7 @@ int set(ArrayParty *party, int index, int key)
     return LPA_FAILURE;
   }
 
-  fragment = getFragment(party, index);
-  fragmentIndex = getFragmentIndex(party, index);
-
-  // If the index is in an unallocated fragment, then allocate that fragment
-  // and place the key at the index.
+  // If the index is in an unallocated fragment, then allocate that fragment.
   if (party->fragments[fragment] == NULL)
   {
     party->fragments[fragment] = malloc(sizeof(int) * party->fragment_length);
@@ -174,14 +176,13 @@ int set(ArrayParty *party, int index, int key)
 
     // Status of ArrayParty
     printf("-> Spawned fragment %d. (capacity: %d, indices: %d..%d)\n", fragment, party->fragment_length, lowerBound, upperBound);
-
   }
 
-  // This is to prevent duplicate keys at the same index.
+  // Preventing duplicate keys.
   else if (party->fragments[fragment][fragmentIndex] == key)
     return LPA_SUCCESS;
 
-  // If index points to an UNUSED cell, insert key and update ArrayParty.
+  // If array fragment is allocated, place 'key' at index.
   else if (party->fragments[fragment][fragmentIndex] == UNUSED)
   {
     party->fragments[fragment][fragmentIndex] = key;
@@ -189,14 +190,14 @@ int set(ArrayParty *party, int index, int key)
     party->size++;
   }
 
-  // If a key at index is being replaced.
+  // Replace 'key' at index.
   else
     party->fragments[fragment][fragmentIndex] = key;
 
   return LPA_SUCCESS;
 }
 
-// Retrieves key from the ArrayParty.
+// Retrieves 'key' from the ArrayParty.
 int get(ArrayParty *party, int index)
 {
   int fragment, fragmentIndex;
@@ -207,15 +208,14 @@ int get(ArrayParty *party, int index)
     return LPA_FAILURE;
   }
 
-  // Checks if index is invalid. (I,e., index is out of ArrayParty bounds).
+  fragment = getFragment(party, index);
+  fragmentIndex = getFragmentIndex(party, index);
+
   if (out_of_bounds(party, index))
   {
     printf("-> Bloop! Invalid access in get(). (index: %d, fragment: %d, offset: %d)\n", index, fragment, fragmentIndex);
     return LPA_FAILURE;
   }
-
-  fragment = getFragment(party, index);
-  fragmentIndex = getFragmentIndex(party, index);
 
   if (party->fragments[fragment] == NULL)
     return UNUSED;
@@ -224,7 +224,7 @@ int get(ArrayParty *party, int index)
   return party->fragments[fragment][fragmentIndex];
 }
 
-// Deletes the key from the ArrayParty.
+// Deletes 'key' from the ArrayParty.
 int delete(ArrayParty *party, int index)
 {
   int i;
@@ -239,16 +239,16 @@ int delete(ArrayParty *party, int index)
     return LPA_FAILURE;
   }
 
-  // Checks if index is invalid. (I,e., index is out of ArrayParty bounds).
+  fragment = getFragment(party, index);
+  fragmentIndex = getFragmentIndex(party, index);
+
   if (out_of_bounds(party, index))
   {
     printf("-> Bloop! Invalid access in delete(). (index: %d, fragment: %d, offset: %d)\n", index, fragment, fragmentIndex);
     return LPA_FAILURE;
   }
 
-  fragment = getFragment(party, index);
-  fragmentIndex = getFragmentIndex(party, index);
-
+  // If 'key' doesnt exist at the index.
   if (party->fragments[fragment] == NULL || party->fragments[fragment][fragmentIndex] == UNUSED)
     return LPA_FAILURE;
 
@@ -288,7 +288,7 @@ int containsKey(ArrayParty *party, int key)
   return 0;
 }
 
-// Returns 1 if a key is inserted at a specified index in the ArrayParty.
+// Returns 1 if a key exists at the specified index.
 int isSet(ArrayParty *party, int index)
 {
   int fragment;
@@ -307,6 +307,7 @@ int isSet(ArrayParty *party, int index)
 }
 
 // Prints key at specified index, if it exists.
+// If no key exists, quietly fails.
 int printIfValid(ArrayParty *party, int index)
 {
   // Refers to dimensions of ArrayParty.
@@ -316,11 +317,9 @@ int printIfValid(ArrayParty *party, int index)
   if (party == NULL)
     return LPA_FAILURE;
 
-  // Determines which cell index maps to.
   fragment = getFragment(party, index);
   fragmentIndex = getFragmentIndex(party, index);
-
-  // Checks if index is invalid. (I,e., index is out of ArrayParty bounds).
+  
   if (out_of_bounds(party, index))
     return LPA_FAILURE;
 
