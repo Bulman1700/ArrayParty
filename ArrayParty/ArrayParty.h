@@ -25,35 +25,36 @@ typedef ArrayParty AP;
 
 // Functional Prototypes
 
-ArrayParty *createArrayParty(int num_fragments, int fragment_length);
+AP *createArrayParty(int num_fragments, int fragment_length);
 
-ArrayParty *destroyArrayParty(ArrayParty *party);
+AP *destroyArrayParty(AP *party);
 
-ArrayParty *cloneArrayParty(ArrayParty *party);
+AP *cloneArrayParty(AP *party);
 
-ArrayParty *resetArrayParty(ArrayParty *party);
+AP *resetArrayParty(AP *party);
 
-int set(ArrayParty *party, int index, int key);
+int set(AP *party, int index, int key);
 
-int get(ArrayParty *party, int index);
+int get(AP *party, int index);
 
-int delete(ArrayParty *party, int index);
+int delete(AP *party, int index);
 
-int containsKey(ArrayParty *party, int key);
+int containsKey(AP *party, int key);
 
-int isSet(ArrayParty *party, int index);
+int isSet(AP *party, int index);
 
-int printIfValid(ArrayParty *party, int index);
+int printIfValid(AP *party, int index);
 
-int getSize(ArrayParty *party);
+int getSize(AP *party);
 
-int getCapacity(ArrayParty *party);
+int getCapacity(AP *party);
 
-int getAllocatedCellCount(ArrayParty *party);
+int getAllocatedCellCount(AP *party);
 
-long long unsigned int getArraySizeInBytes(ArrayParty *party);
+long long unsigned int getArraySizeInBytes(AP *party);
 
-long long unsigned int getCurrentSizeInBytes(ArrayParty *party);
+long long unsigned int getCurrentSizeInBytes(AP *party);
 
 
 #endif
+
