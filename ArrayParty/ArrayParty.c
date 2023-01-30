@@ -13,7 +13,6 @@
 int getFragment(ArrayParty *party, int index);
 int getFragmentIndex(ArrayParty *party, int index);
 int out_of_bounds(ArrayParty *party, int index);
-void allocateFragment(ArrayParty *party);
 
 // Main Functions
 
