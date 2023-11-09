@@ -2,30 +2,21 @@
 
 // ArrayParty.c
 // ============
-// Data structure alternative to a static 2D array, named ArrayParty.
+// Data structure alternative to a static 2D array.
 
 #include "ArrayParty.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-// Helper Function Prototypes
-
-int getFragment(ArrayParty *party, int index);
-int getFragmentIndex(ArrayParty *party, int index);
-int out_of_bounds(ArrayParty *party, int index);
-
-// Main Functions
 
 // Returns a new ArrayParty with capacity: num_fragments * fragment_length.
 ArrayParty *createArrayParty(int num_fragments, int fragment_length)
 {
   ArrayParty *party;
-  int i, j;
 
   if (num_fragments <= 0 || fragment_length <= 0)
     return NULL;
 
-  // Allocating memory for ArrayParty and checking for allocation failures.
   if ((party = malloc(sizeof(ArrayParty))) == NULL)
     return NULL;
 
@@ -122,10 +113,8 @@ ArrayParty *cloneArrayParty(ArrayParty *party)
 // Sets 'key' at 'index' in the ArrayParty.
 int set(ArrayParty *party, int index, int key)
 {
-
   int fragment, fragmentIndex;
 
-  // Bounds of the fragment that 'index' is in.
   int upperBound = 0, lowerBound;
   int i;
 
@@ -139,7 +128,6 @@ int set(ArrayParty *party, int index, int key)
   fragment = getFragment(party, index);
   fragmentIndex = getFragmentIndex(party, index);
 
-  // Checks if index is invalid. (I,e., index is out of ArrayParty bounds).
   if (out_of_bounds(party, index))
   {
     // Status of ArrayParty.
@@ -147,7 +135,7 @@ int set(ArrayParty *party, int index, int key)
     return LPA_FAILURE;
   }
 
-  // If the index is in an unallocated fragment, then allocate that fragment.
+  // If the index is being placed in an unallocated fragment, then allocate that fragment.
   if (party->fragments[fragment] == NULL)
   {
     party->fragments[fragment] = malloc(sizeof(int) * party->fragment_length);
@@ -226,8 +214,6 @@ int get(ArrayParty *party, int index)
 // Deletes 'key' from the ArrayParty.
 int delete(ArrayParty *party, int index)
 {
-  int i;
-  int temp = index;
   int upperBound = 0, lowerBound = 0;
 
   int fragment, fragmentIndex;
