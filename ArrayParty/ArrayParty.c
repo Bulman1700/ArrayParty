@@ -9,6 +9,11 @@
 #include <stdlib.h>
 
 
+// Helper function prototypes.
+int getFragment(ArrayParty *party, int index);
+int getFragmentIndex(ArrayParty *party, int index);
+int out_of_bounds(ArrayParty *party, int index);
+
 // Returns a new ArrayParty with capacity: num_fragments * fragment_length.
 ArrayParty *createArrayParty(int num_fragments, int fragment_length)
 {
