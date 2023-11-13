@@ -8,13 +8,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Helper function prototypes.
 
-// Helper function prototypes
+// Locates fragment that 'index' is mapped to.
 int getFragment(ArrayParty *party, int index);
+
+// Locates fragment cell that 'index' is mapped to.
 int getFragmentIndex(ArrayParty *party, int index);
+
+// Checks if 'index' is valid.
 int out_of_bounds(ArrayParty *party, int index);
 
-// Returns a new ArrayParty with capacity: num_fragments * fragment_length.
 ArrayParty *createArrayParty(int num_fragments, int fragment_length)
 {
   ArrayParty *party;
@@ -44,7 +48,6 @@ ArrayParty *createArrayParty(int num_fragments, int fragment_length)
   return party;
 }
 
-// Frees entire ArrayParty.
 ArrayParty *destroyArrayParty(ArrayParty *party)
 {
   int i;
@@ -65,7 +68,6 @@ ArrayParty *destroyArrayParty(ArrayParty *party)
   return NULL;
 }
 
-// Returns a separate copy of the ArrayParty.
 ArrayParty *cloneArrayParty(ArrayParty *party)
 {
   ArrayParty *partyClone;
@@ -115,7 +117,6 @@ ArrayParty *cloneArrayParty(ArrayParty *party)
   return partyClone;
 }
 
-// Sets 'key' at 'index' in the ArrayParty.
 int set(ArrayParty *party, int index, int key)
 {
   int fragment, fragmentIndex;
@@ -189,7 +190,6 @@ int set(ArrayParty *party, int index, int key)
   return LPA_SUCCESS;
 }
 
-// Retrieves 'key' from the ArrayParty.
 int get(ArrayParty *party, int index)
 {
   int fragment, fragmentIndex;
@@ -216,7 +216,6 @@ int get(ArrayParty *party, int index)
   return party->fragments[fragment][fragmentIndex];
 }
 
-// Deletes 'key' from the ArrayParty.
 int delete(ArrayParty *party, int index)
 {
   int upperBound = 0, lowerBound = 0;
@@ -263,8 +262,6 @@ int delete(ArrayParty *party, int index)
   return LPA_SUCCESS;
 }
 
-// Linear search for the key.
-// Returns 1 if found.
 int containsKey(ArrayParty *party, int key)
 {
   int i, j;
@@ -278,7 +275,6 @@ int containsKey(ArrayParty *party, int key)
   return 0;
 }
 
-// Returns 1 if a key exists at the specified index.
 int isSet(ArrayParty *party, int index)
 {
   int fragment;
@@ -296,8 +292,6 @@ int isSet(ArrayParty *party, int index)
   return 0;
 }
 
-// Prints key at specified index, if it exists.
-// If no key exists, quietly fails.
 int printIfValid(ArrayParty *party, int index)
 {
   // Refers to dimensions of ArrayParty.
@@ -324,7 +318,6 @@ int printIfValid(ArrayParty *party, int index)
   return LPA_SUCCESS;
 }
 
-// Returns ArrayParty to its initial state.
 ArrayParty *resetArrayParty(ArrayParty *party)
 {
   int i;
@@ -348,7 +341,6 @@ ArrayParty *resetArrayParty(ArrayParty *party)
   return party;
 }
 
-// Gets total size of the ArrayParty.
 int getSize(ArrayParty *party)
 {
   if (party == NULL)
@@ -357,7 +349,6 @@ int getSize(ArrayParty *party)
   return party->size;
 }
 
-// Gets total capacity of the ArrayParty.
 int getCapacity(ArrayParty *party)
 {
   if (party == NULL)
@@ -366,7 +357,6 @@ int getCapacity(ArrayParty *party)
   return (party->num_fragments * party->fragment_length);
 }
 
-// Gets allocated capacity of the ArrayParty.
 int getAllocatedCellCount(ArrayParty *party)
 {
   if (party == NULL)
@@ -375,7 +365,6 @@ int getAllocatedCellCount(ArrayParty *party)
   return (party->num_active_fragments * party->fragment_length);
 }
 
-// Returns size (in bytes) of static 2D array with eqivalent data.
 long long unsigned int getArraySizeInBytes(ArrayParty *party)
 {
   if (party == NULL)
@@ -384,7 +373,6 @@ long long unsigned int getArraySizeInBytes(ArrayParty *party)
   return (long long unsigned int)(getCapacity(party) * sizeof(int));
 }
 
-// Gets total size (int bytes) of the ArrayParty.
 long long unsigned int getCurrentSizeInBytes(ArrayParty *party)
 {
 
