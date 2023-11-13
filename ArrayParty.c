@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 
-// Helper function prototypes.
+// Helper function prototypes
 int getFragment(ArrayParty *party, int index);
 int getFragmentIndex(ArrayParty *party, int index);
 int out_of_bounds(ArrayParty *party, int index);
