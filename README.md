@@ -13,11 +13,14 @@ To run the **test.c** file, type the following into terminal in the directory in
 
 ## How To Use
 ArrayParty is pretty simple to use. To initialize a new **ArrayParty** struct pointer: you can use the *createArrayParty(num_fragments, fragment_length)* function.
+
     -- ArrayParty *newParty = createArrayParty(55, 30);
+
 '55' is the length of *newParty* (i.e., the number of fragments *newParty* holds).
 '30' is the length of each fragment in *newParty*. 
 
 To insert elements into **ArrayParty**, you can use the *set(newParty, index, key)* function, where *index* is on the range of (num_fragments * fragment_length - 1).
+
     -- ArrayParty *party = createArrayParty(3, 12);
     -- set(party, 14, 599);
 
